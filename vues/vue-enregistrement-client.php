@@ -18,11 +18,14 @@
 
 				<?php
 
-					$styleErreur = 'color:red; background-color:#fee; border-radius:5%';
+					$styleErreur = 'color:red; background-color:#fee; border-radius:5%; text-align:center';
 
 					switch($_SERVER['REQUEST_URI']){
 						case "/sbateliers/vues/vue-enregistrement-client.php?echec=code_postal":
-							echo "<p style='$styleErreur'>Mauvais format de code postal.</p>";
+							echo "<p style='$styleErreur'>Mauvais format [ Code postal ].</p>";
+							break;
+						case "/sbateliers/vues/vue-enregistrement-client.php?echec=numero_tel":
+							echo "<p style='$styleErreur'>Mauvais format [ Numéro de téléphone ].</p>";
 							break;
 					}
 
