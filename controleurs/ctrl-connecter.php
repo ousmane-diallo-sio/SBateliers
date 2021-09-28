@@ -5,11 +5,14 @@
 	
 	try {
 		$datetime = new DateTime();
-		$resultatAuth = null;
+		$dateHeure = $datetime->format('D-m-y H:i:s');
 
-		$logFile = fopen('/var/log/sbateliers/access.log');
-		$logContent = $_SERVER['REMOTE_ADDR'] ." | $datetime->format('D-m-y H:i:s') | $email | $resultatAuth | " .$_SERVER['HTTP_USER_AGENT'];
+		$logFile = "/var/log/sbateliers/access.log";
 
+		$ipClient = $_SERVER['REMOTE_ADDR'];
+		$navigateurClient = $_SERVER['HTTP_USER_AGENT'];
+
+		
 
 		$bd = new PDO(
 						'mysql:host=localhost;dbname=sbateliers' ,
@@ -44,21 +47,22 @@
 			$_SESSION[ 'adresse' ] = $resultat[0]['adresse'] ;
 			$_SESSION[ 'ville' ] = $resultat[0]['ville'] ;
 			$_SESSION[ 'numero_tel' ] = $resultat[0]['numero_tel'] ;
-
-			
 			$_SESSION[ 'email' ] = $email ;
 			$_SESSION['datetimeAuth'] = $datetime->format('D-m-y H:i:s');
 
-			$resultatAuth = "Ok";
-			fputs($logFile , $logContent);
-			fclose($logFile);
+
+			$resultatAuth = 'Ok';
+			$logContent = "$ipClient | $dateHeure | $email | $resultatAuth | $navigateurClient\n";
+			$_SESSION[ 'logContent' ] = $logContent;
+			file_put_contents($logFile, $logContent, FILE_APPEND);
 
 			header( 'Location: ../vues/vue-liste-ateliers.php' ) ;
 		}
 		else {
 			$resultatAuth = "Nok";
-			fputs($logFile , $logContent);
-			fclose($logFile);
+			$logContent = "$ipClient | $dateHeure | $email | $resultatAuth | $navigateurClient\n";
+			file_put_contents($logFile, $logContent, FILE_APPEND);
+
 
 			header( 'Location: ../index.php?echec=1') ;
 		}
@@ -66,8 +70,10 @@
 	catch( PDOException $e ){
 		
 		$resultatAuth = "Nok";
-		fputs($logFile , $logContent);
-		fclose($logFile);
+		$logContent = "$ipClient | $dateHeure | $email | $resultatAuth | $navigateurClient\n";
+		file_put_contents($logFile, $logContent, FILE_APPEND);
+
+				
 		header( 'Location: ../index.php?echec=0' ) ;
 	}
 

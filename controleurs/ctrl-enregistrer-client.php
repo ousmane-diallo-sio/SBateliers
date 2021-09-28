@@ -15,6 +15,12 @@
 	$mdp = $_POST[ 'mdp' ] ;
 
 
+	$datetime = new DateTime();
+	$dateHeure = $datetime->format('D-m-y H:i:s');
+
+	$ipClient = $_SERVER['REMOTE_ADDR'];
+	$navigateurClient = $_SERVER['HTTP_USER_AGENT'];
+
 	if(preg_match("/[0-9]{10}/", $numero_tel)){
 		if ( preg_match("/([0-9]{5})|([0-9].)/", $code_postal) ){
       
@@ -81,11 +87,16 @@
 	
 		}
 		else{
+			$logContent = "$ipClient | $dateHeure | inscription-client | code_postal | $code_postal\n";
+			file_put_contents("/var/log/sbateliers/err_input.log", $logContent, FILE_APPEND);
 			header('Location: ../vues/vue-enregistrement-client.php?echec=code_postal');
 		}
 
 	}
 	else{
+		$logContent = "$ipClient | $dateHeure | inscription-client | numero_tel | $numero_tel\n";
+		file_put_contents("/var/log/sbateliers/err_input.log", $logContent, FILE_APPEND);
+
 		header('Location: ../vues/vue-enregistrement-client.php?echec=numero_tel');
 	}
 		
