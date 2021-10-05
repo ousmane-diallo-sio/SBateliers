@@ -1,4 +1,10 @@
-h1,h2,h3,h4,h5,p,a,label{
+body{
+	display: flex;
+	flex-direction: column;
+	justify-content:center;
+}
+
+h1,h2,h3,h4,h5,p,a,label, table{
 	font-family: arial;
 }
 
@@ -30,3 +36,12 @@ input:hover{
 }
 
 
+table, tr, td{
+	border: solid #000 2px;
+	border-collapse: collapse;
+	padding: 15px;
+}
+
+thead{
+	font-weight: 700;
+}

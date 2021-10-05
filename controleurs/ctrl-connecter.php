@@ -1,11 +1,61 @@
+<?php 
+
+	$datetime = new DateTime();
+	$dateHeure = $datetime->format('D-m-y H:i:s');
+
+?>
+
+
+<?php 
+
+	function getListeAteliers(){
+
+
+		try{
+
+			$bd = new PDO(
+							'mysql:host=localhost;dbname=sbateliers',
+							'sanayabio',
+							'sb2021'
+			);
+
+			$sql = 'select * from Atelier';
+
+			$st = $bd->prepare($sql);
+
+			$st->execute();
+
+			$listeAteliers = $st->fetchall();
+
+			unset($bd);
+
+
+			if( count( $listeAteliers == 1 ) ){
+				return $listeAteliers;
+			}
+
+
+		}
+		catch(PDOException $e){
+			$errorLog = "/var/log/sbateliers/error.log";
+
+			$errorLogData = "$dateHeure | $e | vue-connexion.php\n";
+
+			file_put_contents($errorLog, $errorLogData, FILE_APPEND);
+		}
+
+
+	} 
+?>
+
+
+
 <?php
 	
 	$email = $_POST[ 'email' ] ;
 	$mdp = $_POST[ 'mdp' ] ;
 	
 	try {
-		$datetime = new DateTime();
-		$dateHeure = $datetime->format('D-m-y H:i:s');
 
 		$logFile = "/var/log/sbateliers/access.log";
 
@@ -49,12 +99,14 @@
 			$_SESSION[ 'numero_tel' ] = $resultat[0]['numero_tel'] ;
 			$_SESSION[ 'email' ] = $email ;
 			$_SESSION['datetimeAuth'] = $datetime->format('D-m-y H:i:s');
+			$_SESSION['listeAteliers'] = getListeAteliers();
 
 
 			$resultatAuth = 'Ok';
 			$logContent = "$ipClient | $dateHeure | $email | $resultatAuth | $navigateurClient\n";
 			$_SESSION[ 'logContent' ] = $logContent;
 			file_put_contents($logFile, $logContent, FILE_APPEND);
+
 
 			header( 'Location: ../vues/vue-liste-ateliers.php' ) ;
 		}
@@ -70,9 +122,12 @@
 	catch( PDOException $e ){
 		
 		$resultatAuth = "Nok";
-		$logContent = "$ipClient | $dateHeure | $email | $resultatAuth | $navigateurClient\n";
-		file_put_contents($logFile, $logContent, FILE_APPEND);
+		
+		$errorLog = "/var/log/sbateliers/error.log";
 
+		$errorLogData = "$dateHeure | $e | vue-connexion.php\n";
+
+		file_put_contents($errorLog, $errorLogData, FILE_APPEND);
 				
 		header( 'Location: ../index.php?echec=0' ) ;
 	}

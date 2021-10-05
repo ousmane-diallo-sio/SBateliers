@@ -5,7 +5,7 @@
 	<head>
 		<title>Profil</title>
 		
-		<link rel="stylesheet" href="./src/css/styles.css">
+		<link rel="stylesheet" href="../src/css/styles.css"/>
 
 	</head>
 
