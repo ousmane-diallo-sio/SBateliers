@@ -11,10 +11,16 @@
 
 
 	<body>
+
+		<?php 
+			$lienPage = $_SERVER["REQUEST_URI"];
+			$identifiant = explode("login=", $lienPage);
+
+		?>
 		
 		<form action="../controleurs/ctrl-connecter.php" method="POST" style="display:flex; flex-direction:column;" >
 			<label>Identifiant</label>
-			<input name="email" type="email" />
+			<input name="email" type="email" value="<?php echo $identifiant[1]; ?>" />
 			<label>Mot de passe</label>
 			<input name="mdp" type="password" /> </br>
 			<button type="submit">Se connecter</button>
