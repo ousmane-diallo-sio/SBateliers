@@ -10,6 +10,6 @@ create table Commentaire(
 	foreign key idAtelier references Atelier(numero)
 	on update cascade
 	on delete cascade,
-	primary key(idClient, numComm, idAtelier)
+	primary key(idClient, idComm, idAtelier)
 );
 

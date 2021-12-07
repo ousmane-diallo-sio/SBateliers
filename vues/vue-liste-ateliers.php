@@ -1,5 +1,44 @@
 <?php session_start(); ?>
 
+<?php 
+
+function getListeParticipantsParAtelier($numAtelier){
+		
+	try{
+
+		$bd = new PDO(
+						'mysql:host=localhost;dbname=sbateliers',
+						'sanayabio',
+						'sb2021'
+		);
+
+		$sql = 'select numero from Client c inner join Participation p on c.numero = p.numero_client where numero_atelier = :numAtelier;';
+
+		$st = $bd->prepare($sql);
+
+		$st->execute( array(
+					':numAtelier' => $numAtelier,
+					) 
+		);
+
+		$resultat = $st->fetchall();
+
+		unset($bd);
+
+
+		if( count( $resultat == 1 ) ){
+			return $resultat;
+		}
+
+
+	}
+	catch(PDOException $e){
+		print_r($e);
+	}
+
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -31,6 +70,7 @@
 						<td>Durée</td>
 						<td>Nombre de places</td>
 						<td>Thème</td>
+						<td>Action</td>
 					</thead>
 
 					<tbody>
@@ -43,7 +83,12 @@
 									echo "<td>" .$atelier['date_et_heure_prevue'] ."</td>"; 
 									echo "<td>" .$atelier['duree'] ."</td>"; 
 									echo "<td>" .$atelier['nb_places'] ."</td>"; 
-									echo "<td>" .$atelier['theme'] ."</td>"; 
+									echo "<td>" .$atelier['theme'] ."</td>";
+									if( in_array($_SESSION['numero'], getListeParticipantsParAtelier($atelier['numero'])) ){
+										echo "<td>Commenter</td>";
+									} else{
+										echo "<td>Participer</td>";
+									}
 								echo "</tr>";
 
 							}
@@ -51,9 +96,6 @@
 					</tbody>
 					
 				</table>
-
-				<?php print_r( "Liste participants : " . Participation::getListeParticipantsParAtelier(1) ); ?>
-
 
 
 			<div style="text-align: left; color:#0005">
