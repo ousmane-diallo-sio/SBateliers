@@ -12,8 +12,8 @@
 	$adresse = $_POST[ 'adresse' ];
 	
 	$login = $_POST[ 'email' ] ;
-	$mdp = $_POST[ 'mdp' ] ;
-
+	//$mdp = password_hash( $_POST[ 'mdp' ], PASSWORD_DEFAULT );
+	$mdp = $_POST[ 'mdp' ];
 
 	$datetime = new DateTime();
 	$dateHeure = $datetime->format('D-m-y H:i:s');
@@ -81,7 +81,7 @@
 		
 			}
 			catch( PDOException $e ){
-				
+				print_r($e);
 				header( 'Location: ../index.php' );
 			}
 	

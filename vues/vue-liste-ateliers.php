@@ -52,6 +52,8 @@
 					
 				</table>
 
+				<?php print_r( "Liste participants : " . Participation::getListeParticipantsParAtelier(1) ); ?>
+
 
 
 			<div style="text-align: left; color:#0005">
@@ -59,6 +61,7 @@
 				<h4>Adresse IP : <?php echo $_SERVER['REMOTE_ADDR']; ?></h4>
 				<h4>Client HTTP : <?php echo $_SERVER['HTTP_USER_AGENT']; ?> </h4>
 				<h4>Date de connexion : <?php echo $_SESSION['datetimeAuth']; ?> </h4>
+				<h4>HTTP REFERER : <?php echo $_SERVER['HTTP_REFERER']; ?> </h4>
 			</div>
 		</div>
 		

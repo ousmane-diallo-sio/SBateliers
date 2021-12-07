@@ -53,7 +53,8 @@
 <?php
 	
 	$email = $_POST[ 'email' ] ;
-	$mdp = $_POST[ 'mdp' ] ;
+	//$mdp = password_hash( $_POST[ 'mdp' ], PASSWORD_DEFAULT );
+	$mdp = $_POST[ 'mdp' ];
 	
 	try {
 

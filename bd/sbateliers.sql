@@ -25,7 +25,8 @@ create table Responsable_Atelier(
 	numero int,
 	nom_de_connexion varchar(40),
 	nom varchar(30),
-	prenom varchar(30)
+	prenom varchar(30),
+	mdp varchar(40)
 );
 
 
@@ -41,10 +42,14 @@ create table Atelier(
 
 create table Participation(
 	numero_atelier int,
+	numero_client int,
 	foreign key (numero_atelier) references Atelier(numero)
 	on update cascade
 	on delete cascade,
-	primary key (numero_atelier),
+	foreign key (numero_client) references Client(numero)
+	on update cascade
+	on delete cascade,
+	primary key (numero_atelier, numero_client),
 	date_inscription date
 );
 

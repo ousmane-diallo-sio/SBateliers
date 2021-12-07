@@ -54,5 +54,4 @@ class ResponsableAtelier{
 $ra = new ResponsableAtelier();
 $ra->progAtelier("2021-10-20", "2022-01-25", "01:30", 106, "Jeux vidéo");
 
-
 ?>
