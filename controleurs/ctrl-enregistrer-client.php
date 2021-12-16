@@ -1,19 +1,22 @@
 <?php
 
+	$cipher = "aes-128-cbc";
+	$key = "chiffrement";
+	$iv = "123456";
 
 	$nom = $_POST[ 'nom' ] ;
-	$prenom = $_POST[ 'prenom' ];
-	$civilite = $_POST[ 'civilite' ];
-	$date_de_naissance = $_POST[ 'date_de_naissance' ];
-	$code_postal = $_POST[ 'code_postal' ];
-	$ville = $_POST[ 'ville' ];
-	$numero_tel = $_POST[ 'numero_tel' ];
-	$email = $_POST[ 'email' ] ;
-	$adresse = $_POST[ 'adresse' ];
+	$prenom = $_POST[ 'prenom' ] ;
+	$date_de_naissance = $_POST[ 'date_de_naissance' ] ;
+	$code_postal = $_POST[ 'code_postal' ] ;
+	$ville = $_POST[ 'ville' ] ;
+	$numero_tel = $_POST[ 'numero_tel' ] ;
+	$adresse = $_POST[ 'adresse' ] ;
 	
+	$civilite = $_POST[ 'civilite' ] ;
+	$email = $_POST[ 'email' ] ;
 	$login = $_POST[ 'email' ] ;
-	//$mdp = password_hash( $_POST[ 'mdp' ], PASSWORD_DEFAULT );
-	$mdp = $_POST[ 'mdp' ];
+
+	$mdp = password_hash( $_POST[ 'mdp' ], PASSWORD_DEFAULT ) ;
 
 	$datetime = new DateTime();
 	$dateHeure = $datetime->format('D-m-y H:i:s');
@@ -23,7 +26,12 @@
 
 	if(preg_match("/[0-9]{10}/", $numero_tel)){
 		if ( preg_match("/([0-9]{5})|([0-9].)/", $code_postal) ){
-      
+
+			$nom = openssl_encrypt( $_POST[ 'nom' ], $cipher, $key, 0, $iv) ;
+			$prenom = openssl_encrypt( $_POST[ 'prenom' ] , $cipher, $key, 0, $iv) ;
+			$ville = openssl_encrypt( $_POST[ 'ville' ], $cipher, $key, 0, $iv) ;
+			$numero_tel = openssl_encrypt( $_POST[ 'numero_tel' ], $cipher, $key, 0, $iv) ;
+			$adresse = openssl_encrypt( $_POST[ 'adresse' ], $cipher, $key, 0, $iv) ;
 		
 			try {
 	

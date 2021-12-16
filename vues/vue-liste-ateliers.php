@@ -27,7 +27,7 @@ function getListeParticipantsParAtelier($numAtelier){
 
 
 		if( count( $resultat == 1 ) ){
-			return $resultat;
+			return $resultat[0];
 		}
 
 
@@ -76,7 +76,7 @@ function getListeParticipantsParAtelier($numAtelier){
 					<tbody>
 						<?php
 							foreach($_SESSION['listeAteliers'] as $atelier){
-								
+
 								echo "<tr>";
 									echo "<td>" .$atelier['numero'] ."</td>";
 									echo "<td>" .$atelier['date_enregistrement'] ."</td>"; 
@@ -85,9 +85,9 @@ function getListeParticipantsParAtelier($numAtelier){
 									echo "<td>" .$atelier['nb_places'] ."</td>"; 
 									echo "<td>" .$atelier['theme'] ."</td>";
 									if( in_array($_SESSION['numero'], getListeParticipantsParAtelier($atelier['numero'])) ){
-										echo "<td>Commenter</td>";
+										echo "<td><a href='/'>Commenter</a></td>";
 									} else{
-										echo "<td>Participer</td>";
+										echo "<td><a href='/'>Participer</a></td>";
 									}
 								echo "</tr>";
 

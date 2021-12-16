@@ -53,10 +53,13 @@
 <?php
 	
 	$email = $_POST[ 'email' ] ;
-	//$mdp = password_hash( $_POST[ 'mdp' ], PASSWORD_DEFAULT );
 	$mdp = $_POST[ 'mdp' ];
 	
 	try {
+
+		$cipher = "aes-128-cbc";
+		$key = "chiffrement";
+		$iv = "123456";
 
 		$logFile = "/var/log/sbateliers/access.log";
 
@@ -73,31 +76,30 @@
 			
 		$sql = 'select * '
 			 . 'from Client '
-			 . 'where email = :email '
-			 . 'and mdp = :mdp' ;
+			 . 'where email = :email';
 			 
 		$st = $bd -> prepare( $sql ) ;
 		
 		$st -> execute( array( 
-								':email' => $email ,
-								':mdp' => $mdp 
+								':email' => $email 
 						) 
 					) ;
 		$resultat = $st -> fetchall() ;
 			
 		unset( $bd ) ;
 		
-		if( count( $resultat ) == 1 ) {
+		if( count( $resultat ) == 1 && password_verify($mdp, $resultat[0]['mdp']) ) {
 			session_start() ;
+
 			$_SESSION[ 'numero' ] = $resultat[0]['numero'] ;
-			$_SESSION[ 'nom' ] = $resultat[0]['nom'] ;
-			$_SESSION[ 'prenom' ] = $resultat[0]['prenom'] ;
+			$_SESSION[ 'nom' ] = openssl_decrypt($resultat[0]['nom'], $cipher, $key, 0, $iv) ;
+			$_SESSION[ 'prenom' ] = openssl_decrypt($resultat[0]['prenom'], $cipher, $key, 0, $iv) ;
 			$_SESSION[ 'civilite' ] = $resultat[0]['civilite'] ;
 			$_SESSION[ 'date_de_naissance' ] = $resultat[0]['date_de_naissance'] ;
 			$_SESSION[ 'code_postal' ] = $resultat[0]['code_postal'] ;
-			$_SESSION[ 'adresse' ] = $resultat[0]['adresse'] ;
-			$_SESSION[ 'ville' ] = $resultat[0]['ville'] ;
-			$_SESSION[ 'numero_tel' ] = $resultat[0]['numero_tel'] ;
+			$_SESSION[ 'adresse' ] = openssl_decrypt($resultat[0]['adresse'], $cipher, $key, 0, $iv) ;
+			$_SESSION[ 'ville' ] = openssl_decrypt($resultat[0]['ville'], $cipher, $key, 0, $iv) ;
+			$_SESSION[ 'numero_tel' ] = openssl_decrypt($resultat[0]['numero_tel'], $cipher, $key, 0, $iv) ;
 			$_SESSION[ 'email' ] = $email ;
 			$_SESSION['datetimeAuth'] = $datetime->format('D-m-y H:i:s');
 			$_SESSION['listeAteliers'] = getListeAteliers();
